@@ -22,6 +22,8 @@ EXTRAS
 2. find(value)
 3. copy()
 
+HAHAAAH yellowww
+
 '''
 
 # This would be the item(s) inside a Linkedlist object
