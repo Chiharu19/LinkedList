@@ -2,7 +2,7 @@
 Things to add:
 
 CORE
-1. append
+1. append (Done)
 2. prepend
 3. insert
 4. remove
@@ -21,10 +21,6 @@ EXTRAS
 1. reverse()
 2. find(value)
 3. copy()
-
-Testing the merging
-for 
-another onee
 
 '''
 
@@ -67,20 +63,28 @@ class Linkedlist:
         return self.__tail.data
     
     # appends either a Node or List to the LinkedList chain
-    def append(self, newNode: Node): 
-        if not self.__checkIfValidNode(newNode):
-            raise TypeError(f"Expected <class 'Node'>, got {type(newNode)} instead")
+    def append(self, value: Node | list): 
+        if self.__checkIfValidNode(value):
+            value.next = None     # detach the appending node from any existing chain
 
-        newNode.next = None     # detach the appending node from any existing chain
-
-        if self.__head is None:
-            # list is empty: head and tail are the same
-            self.__head = newNode
-            self.__tail = newNode
+            if self.__head is None:     # if the LinkedList object is empty
+                self.__head = value
+                self.__tail = value
+            else:
+                assert self.__tail is not None      # Ensure self.__tail is not None before setting its next.
+                self.__tail.next = value
+                self.__tail = value
+        elif isinstance(value, list):
+            head, tail = self.__listToLinkedList(value)
+            if self.__head is None:
+                self.__head = head
+                self.__tail = tail
+            else:
+                assert self.__tail is not None
+                self.__tail.next = head     # Link the old tail to the appending head
+                self.__tail = tail
         else:
-            assert self.__tail is not None  # for type checker
-            self.__tail.next = newNode
-            self.__tail = newNode
+            raise TypeError("LinkedList.append() expects a Node or list")
 
     # translates a list into a Linkedlist, returning the head and tail in tuple form
     def __listToLinkedList(self, values: list[any]) -> tuple[Node, Node] | None:
@@ -104,7 +108,10 @@ class Linkedlist:
 
 
 if __name__ == "__main__":
-    ll2 = Linkedlist([100, 101, 103, "fuck me pls"])
-    print(ll2)
+    ll2 = Linkedlist([1, 2, 3, 4, 5])
+    ll2.append(["Hahah", "Hoohoo"])
+    ll2.append(Node(Node("Hoohoohoo")))
     print(ll2.head)
     print(ll2.tail)
+    print(ll2)
+    
