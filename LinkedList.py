@@ -3,7 +3,7 @@ Things to add:
 
 CORE
 1. append (Done)
-2. prepend
+2. prepend (Done)
 3. insert
 4. remove
 5. pop
@@ -62,7 +62,7 @@ class Linkedlist:
     def tail(self):
         return self.__tail.data
     
-    # appends either a Node or List to the LinkedList chain
+    # appends either a Node or List -> LinkedList chain
     def append(self, value: Node | list): 
         if self.__checkIfValidNode(value):
             value.next = None     # detach the appending node from any existing chain
@@ -86,6 +86,7 @@ class Linkedlist:
         else:
             raise TypeError("LinkedList.append() expects a Node or list")
 
+    # prepends a Node or List -> LinkedList Chain
     def prepend(self, value: Node | list):
         if self.__checkIfValidNode(value):
             value.next = self.__head  # Link the new node to the current head
@@ -99,7 +100,10 @@ class Linkedlist:
             if self.__tail is None:  # If the list was empty, update tail as well
                 self.__tail = tail 
         else:
-            raise TypeError("LinkedList.prepend() expects a Node or list") 
+            raise TypeError("LinkedList.prepend() expects a Node or list")
+        
+    # inserts a Node or List -> LinkedList 
+    def insert(self, )
 
     # translates a list into a Linkedlist, returning the head and tail in tuple form
     def __listToLinkedList(self, values: list[any]) -> tuple[Node, Node] | None:
