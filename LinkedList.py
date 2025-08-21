@@ -86,6 +86,21 @@ class Linkedlist:
         else:
             raise TypeError("LinkedList.append() expects a Node or list")
 
+    def prepend(self, value: Node | list):
+        if self.__checkIfValidNode(value):
+            value.next = self.__head  # Link the new node to the current head
+            self.__head = value  # Update head to the new node
+            if self.__tail is None:  # If the list was empty, update tail as well
+                self.__tail = value
+        elif isinstance(value, list):
+            head, tail = self.__listToLinkedList(value)
+            tail.next = self.__head  # Link tail of the new chain to the old head
+            self.__head = head  # Update head to the new head
+            if self.__tail is None:  # If the list was empty, update tail as well
+                self.__tail = tail 
+        else:
+            raise TypeError("LinkedList.prepend() expects a Node or list") 
+
     # translates a list into a Linkedlist, returning the head and tail in tuple form
     def __listToLinkedList(self, values: list[any]) -> tuple[Node, Node] | None:
 
@@ -108,9 +123,11 @@ class Linkedlist:
 
 
 if __name__ == "__main__":
-    ll2 = Linkedlist([1, 2, 3, 4, 5])
+    ll2 = Linkedlist([1, 2, 5])
     ll2.append(["Hahah", "Hoohoo"])
-    ll2.append(Node(Node("Hoohoohoo")))
+    ll2.append(Node("yelloo"))
+    ll2.prepend([89, 101, 102])
+    ll2.prepend(Node("shiet"))
     print(ll2.head)
     print(ll2.tail)
     print(ll2)
