@@ -4,7 +4,7 @@ Things to add:
 CORE
 1. append (Done)
 2. prepend (Done)
-3. insert
+3. insert (Done)
 4. remove
 5. pop
 6. clear
@@ -46,12 +46,15 @@ class Linkedlist:
 
     def __str__(self):
         curr = self.__head
-        res = ""
+        res = "["
         while curr:
-            res += f"[{curr.data}] -> "
+            res += f"{curr.data}, "
             curr = curr.next
 
-        res += "None"
+        # Replace the last occurrence of ',' with ']'
+        if ", " in res:
+            parts = res.rsplit(", ", 1)     # this deletes the last occurence of ','
+            res = "]".join(parts)
         return res
 
     @property
@@ -60,6 +63,7 @@ class Linkedlist:
     
     @property
     def tail(self):
+        print("After tail -> " + str(self.__tail.next))
         return self.__tail.data
     
     # appends either a Node or List -> LinkedList chain
@@ -102,8 +106,49 @@ class Linkedlist:
         else:
             raise TypeError("LinkedList.prepend() expects a Node or list")
         
-    # inserts a Node or List -> LinkedList 
-    def insert(self, )
+    # inserts a Node or List -> LinkedList Chain
+    def insert(self, index: int, value: Node | list):
+        if index < 0:
+            raise IndexError("Negative index not supported")
+        # Prepare the node(s) to insert
+        if self.__checkIfValidNode(value):
+            insert_head = value
+            insert_tail = value
+            value.next = None
+        elif isinstance(value, list):
+            insert_head, insert_tail = self.__listToLinkedList(value)
+        else:
+            raise TypeError("LinkedList.insert() expects a Node or list")
+
+        # Insert at head
+        if index == 0:
+            insert_tail.next = self.__head
+            self.__head = insert_head
+            if self.__tail is None:     # incase that the LinkedList is empty
+                self.__tail = insert_tail
+            return
+
+        # Traverse to node before insertion point
+        # Maximum traversal at the end of the List +1 (prev having a NODE and curr is None)
+        curr = self.__head
+        prev = None
+        curr_index = 0
+        while curr and curr_index < index:
+            prev = curr
+            curr = curr.next
+            curr_index += 1
+
+        # prevents out of bounds insertion unless at the end(next to the last Node)
+        if (prev is None) or (curr_index != index): 
+            raise IndexError("Index out of bounds")
+
+        print(f"{prev} | {curr}")
+
+        # Insert in the middle or end
+        prev.next = insert_head
+        insert_tail.next = curr
+        if curr is None:       # incase of inserting at the end
+            self.__tail = insert_tail
 
     # translates a list into a Linkedlist, returning the head and tail in tuple form
     def __listToLinkedList(self, values: list[any]) -> tuple[Node, Node] | None:
@@ -128,11 +173,6 @@ class Linkedlist:
 
 if __name__ == "__main__":
     ll2 = Linkedlist([1, 2, 5])
-    ll2.append(["Hahah", "Hoohoo"])
-    ll2.append(Node("yelloo"))
-    ll2.prepend([89, 101, 102])
-    ll2.prepend(Node("shiet"))
-    print(ll2.head)
-    print(ll2.tail)
     print(ll2)
-    
+    ll2.insert(3, Node(15))
+    print(ll2)
