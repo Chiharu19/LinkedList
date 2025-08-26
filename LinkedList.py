@@ -5,7 +5,7 @@ CORE
 1. append (Done)
 2. prepend (Done)
 3. insert (Done)
-4. remove
+4. remove (Done)
 5. pop
 6. clear
 7. to_list (convert LL back to python list)
@@ -106,7 +106,7 @@ class Linkedlist:
         else:
             raise TypeError("LinkedList.prepend() expects a Node or list")
         
-    # inserts a Node or List -> LinkedList Chain
+    # inserts a Node or List -> LinkedList Chain before the index
     def insert(self, index: int, value: Node | list):
         if index < 0:
             raise IndexError("Negative index not supported")
@@ -150,6 +150,31 @@ class Linkedlist:
         if curr is None:       # incase of inserting at the end
             self.__tail = insert_tail
 
+    # removes the first occurence of specified value
+    def remove(self, value):
+
+        # if removing the head element
+        if self.__head.data == value:
+            temp = self.__head.next
+            self.__head.next = None     # detach former Head Node to the Chain
+            self.__head = temp          # update new Head
+            return
+
+        prev = self.__head
+        curr = prev.next
+
+        while curr:
+            if curr.data == value:
+                temp = curr.next
+                curr.next = None        # detach Node to the Chain
+                prev.next = temp        # reconnect broken Chain
+                return
+            
+            prev = curr
+            curr = curr.next
+        
+        raise ValueError("No such value in the List")
+
     # translates a list into a Linkedlist, returning the head and tail in tuple form
     def __listToLinkedList(self, values: list[any]) -> tuple[Node, Node] | None:
 
@@ -175,4 +200,6 @@ if __name__ == "__main__":
     ll2 = Linkedlist([1, 2, 5])
     print(ll2)
     ll2.insert(3, Node(15))
+    print(ll2)
+    ll2.remove(16)
     print(ll2)
